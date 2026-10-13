@@ -1,42 +1,94 @@
-<a href="https://livekit.io/">
-  <img src="./.github/assets/livekit-mark.png" alt="LiveKit logo" width="100" height="100">
-</a>
+# Alessio Bellan Meet
 
-# LiveKit Meet
+Piattaforma privata per videoriunioni basata su Next.js, LiveKit Cloud, Better Auth e SQLite.
 
-<p>
-  <a href="https://meet.livekit.io"><strong>Try the demo</strong></a>
-  •
-  <a href="https://github.com/livekit/components-js">LiveKit Components</a>
-  •
-  <a href="https://docs.livekit.io/">LiveKit Docs</a>
-  •
-  <a href="https://livekit.io/cloud">LiveKit Cloud</a>
-  •
-  <a href="https://blog.livekit.io/">Blog</a>
-</p>
+Il progetto è il fork personalizzato di [LiveKit Meet](https://github.com/livekit-examples/meet), adattato all'identità di Alessio Bellan.
 
-<br>
+## Funzioni
 
-LiveKit Meet is an open source video conferencing app built on [LiveKit Components](https://github.com/livekit/components-js), [LiveKit Cloud](https://cloud.livekit.io/), and Next.js. It's been completely redesigned from the ground up using our new components library.
+- Accesso dell'organizzatore con magic link o passkey.
+- Nessuna registrazione pubblica.
+- Creazione di riunioni riservata all'indirizzo configurato in `ADMIN_EMAIL`.
+- Inviti senza account per i partecipanti.
+- Revoca degli inviti e gestione dello stato della riunione.
+- Massimo cinque partecipanti per stanza.
+- Logo del brand presente nelle pagine pubbliche e durante la riunione.
+- SQLite persistente e Docker standalone per una VPS singola.
 
-![LiveKit Meet screenshot](./.github/assets/livekit-meet.jpg)
+## Requisiti
 
-## Tech Stack
+- Node.js 24+
+- pnpm 10+
+- Credenziali LiveKit Cloud
+- Chiave Resend per il magic link
 
-- This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-- App is built with [@livekit/components-react](https://github.com/livekit/components-js/) library.
+## Sviluppo locale
 
-## Demo
+```bash
+pnpm install
+cp .env.example .env.local
+pnpm dev
+```
 
-Give it a try at https://meet.livekit.io.
+Apri `http://localhost:3000`.
 
-## Dev Setup
+Per il primo accesso configura almeno:
 
-Steps to get a local dev setup up and running:
+```env
+BETTER_AUTH_SECRET=una-stringa-casuale-di-almeno-32-caratteri
+ADMIN_EMAIL=alessiobellan@ik.me
+LIVEKIT_API_KEY=...
+LIVEKIT_API_SECRET=...
+LIVEKIT_URL=wss://tuo-progetto.livekit.cloud
+RESEND_API_KEY=...
+EMAIL_FROM=Alessio Bellan Meet <noreply@tuodominio.it>
+```
 
-1. Run `pnpm install` to install all dependencies.
-2. Copy `.env.example` in the project root and rename it to `.env.local`.
-3. Update the missing environment variables in the newly created `.env.local` file.
-4. Run `pnpm dev` to start the development server and visit [http://localhost:3000](http://localhost:3000) to see the result.
-5. Start development 🎉
+Il database viene inizializzato automaticamente in `DATABASE_PATH`. In locale il valore predefinito è `./data/meet.sqlite`.
+
+## Percorsi principali
+
+- `/` homepage pubblica.
+- `/login` accesso dell'organizzatore.
+- `/dashboard` dashboard privata.
+- `/meet/:inviteToken` ingresso degli invitati.
+- `/api/meetings` creazione e lettura delle riunioni protette.
+- `/api/invites/:token` verifica dell'invito.
+- `/api/connection-details` emissione del token LiveKit limitato alla stanza.
+
+## Deploy Docker
+
+1. Copia `.env.example` in `.env.production` e inserisci valori reali.
+2. Imposta `APP_URL` e `BETTER_AUTH_URL` sull'URL HTTPS pubblico.
+3. Avvia il servizio:
+
+```bash
+docker compose up -d --build
+```
+
+Il volume `meet-data` conserva SQLite tra gli aggiornamenti. Usa un reverse proxy HTTPS davanti al container e fai un backup del volume prima di ogni deploy.
+
+## Verifica
+
+```bash
+pnpm test
+pnpm exec tsc --noEmit
+pnpm build
+node scripts/browser-check.mjs
+```
+
+I test browser verificano homepage e login su desktop e mobile, overflow, errori console e risposte delle API non autenticata. Una verifica WebRTC completa richiede credenziali LiveKit e dispositivi reali o browser configurati.
+
+## Sicurezza
+
+- Le API di creazione sono protette lato server.
+- I token LiveKit sono brevi e limitati alla stanza autorizzata.
+- Gli inviti sono casuali, memorizzati e revocabili.
+- Better Auth applica origini fidate, cookie sicuri, rate limiting e audit log.
+- Non inserire segreti in Git, Dockerfile o immagini.
+
+Per il modello delle minacce vedi [meet-threat-model.md](./meet-threat-model.md).
+
+## Repository
+
+Fork: [TonnoConsorzio/meet](https://github.com/TonnoConsorzio/meet)

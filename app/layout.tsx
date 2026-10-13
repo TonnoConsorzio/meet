@@ -5,28 +5,25 @@ import type { Metadata, Viewport } from 'next';
 import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
-  title: {
-    default: 'LiveKit Meet | Conference app build with LiveKit open source',
-    template: '%s',
-  },
-  description:
-    'LiveKit is an open source WebRTC project that gives you everything needed to build scalable and real-time audio and/or video experiences in your applications.',
+  metadataBase: new URL(process.env.APP_URL ?? 'http://localhost:3000'),
+  title: { default: 'Alessio Bellan Meet', template: '%s | Alessio Bellan Meet' },
+  description: 'Riunioni di lavoro private, chiare e protette.',
   twitter: {
-    creator: '@livekitted',
-    site: '@livekitted',
+    creator: '@alessiobellan',
+    site: '@alessiobellan',
     card: 'summary_large_image',
   },
   openGraph: {
-    url: 'https://meet.livekit.io',
+    url: 'https://www.alessiobellan.it/',
     images: [
       {
-        url: 'https://meet.livekit.io/images/livekit-meet-open-graph.png',
+        url: '/images/livekit-meet-open-graph.png',
         width: 2000,
         height: 1000,
         type: 'image/png',
       },
     ],
-    siteName: 'LiveKit Meet',
+    siteName: 'Alessio Bellan Meet',
   },
   icons: {
     icon: {
@@ -45,12 +42,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#070707',
+  themeColor: '#FCCF03',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="it">
       <body data-lk-theme="default">
         <Toaster />
         {children}

@@ -1,5 +1,5 @@
 {
-  "name": "livekit-meet",
+  "name": "alessio-bellan-meet",
   "version": "0.2.0",
   "private": true,
   "scripts": {
@@ -13,11 +13,13 @@
     "format:write": "prettier --write \"**/*.{ts,tsx,md,json}\""
   },
   "dependencies": {
+    "@better-auth/passkey": "^1.7.7",
     "@datadog/browser-logs": "^5.23.3",
     "@livekit/components-react": "2.9.24",
     "@livekit/components-styles": "1.2.0",
     "@livekit/krisp-noise-filter": "0.4.4",
     "@livekit/track-processors": "^0.8.0",
+    "better-auth": "^1.7.7",
     "livekit-client": "2.22.4",
     "livekit-server-sdk": "2.19.1",
     "next": "15.5.21",

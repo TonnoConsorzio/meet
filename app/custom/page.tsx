@@ -1,6 +1,7 @@
 import { videoCodecs } from 'livekit-client';
 import { VideoConferenceClientImpl } from './VideoConferenceClientImpl';
 import { isVideoCodec } from '@/lib/types';
+import { notFound } from 'next/navigation';
 
 export default async function CustomRoomConnection(props: {
   searchParams: Promise<{
@@ -10,6 +11,7 @@ export default async function CustomRoomConnection(props: {
     singlePC?: string;
   }>;
 }) {
+  if (process.env.NODE_ENV === 'production') notFound();
   const { liveKitUrl, token, codec, singlePC } = await props.searchParams;
   if (typeof liveKitUrl !== 'string') {
     return <h2>Missing LiveKit URL</h2>;

@@ -18,6 +18,8 @@
 # misc
 .DS_Store
 *.pem
+/data/
+.corepack/
 
 # debug
 npm-debug.log*
